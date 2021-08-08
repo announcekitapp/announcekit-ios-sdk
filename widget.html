@@ -1,0 +1,95 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+     <body>
+         <div class="announcekit-widget"></div>
+      <script>
+
+          // javascript
+          if (window.webkit) {
+            console.log = function(msg) {
+              if (typeof msg == 'object') {
+                msg = objToString(msg);
+              }
+              window.webkit.messageHandlers.logHandler.postMessage(msg);
+            };
+
+            window.onerror = (msg, url, line, column, error) => {
+              const message = {
+                message: msg,
+                url: url,
+                line: line,
+                column: column,
+                error: JSON.stringify(error)
+              }
+                window.webkit.messageHandlers.logHandler.postMessage(message);
+            };
+          }
+
+          function objToString(obj) {
+            var str = '';
+            for (var p in obj) {
+              if (obj.hasOwnProperty(p)) {
+                str += p + '::' + obj[p] + '\n';
+              }
+            }
+            return str;
+          }
+
+         window.onload = (event) => {
+             if (typeof start === "function") {
+                 start();
+             } else {
+                 console.log("Warning – Widget is not loaded from the iOS app");
+             }
+
+             announcekit.on("init", function() {
+               // Called when the announcekit code loads. Before the widgets are loaded.
+               console.log(`announcekit.on.init`);
+             });
+
+             announcekit.on("widget-init", function(event) {
+               // Called for each widget after the widget has been successfully loaded.
+               // Widget  object is passed to the handler.
+               console.log(`announcekit.on.widget-init`);
+
+               event.widget.watchState(function (unread) {
+                 console.log('read unread state', unread);
+                 if (window.webkit) {
+                     window.webkit.messageHandlers.updateUnreadCount.postMessage({unread:unread});
+                 }
+               }, function (state) {
+                 return state.ui.unreadCount || 0
+               })
+             });
+
+             announcekit.on("widget-open", function({ widget }) {
+               // Called when the specified widget is opened
+               console.log(`announcekit.on.widget-open`);
+             });
+
+             announcekit.on("widget-close", function({ widget }) {
+               // Called when the specified widget is closed
+               console.log(`announcekit.on.widget-close`);
+             });
+
+             announcekit.on("widget-resize", function({ widget, size }) {
+               // Called when the specified widget is resized
+               console.log(`announcekit.on.widget-resize`);
+             });
+
+             announcekit.on("widget-unread", function({ widget, unread }) {
+               // Called when unread post count of specified widget has been updated
+               console.log(`announcekit.on.widget-unread`);
+
+               if (window.webkit) {
+                   window.webkit.messageHandlers.updateUnreadCount.postMessage({unread:unread});
+               }
+             });
+      };
+
+      </script>
+      <script src="https://cdn.announcekit.app/widget-v2.js"></script>
+     </body>
+</html>
