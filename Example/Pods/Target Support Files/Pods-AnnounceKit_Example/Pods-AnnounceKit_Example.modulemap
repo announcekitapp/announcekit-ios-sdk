@@ -1,0 +1,6 @@
+framework module Pods_AnnounceKit_Example {
+  umbrella header "Pods-AnnounceKit_Example-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -1,0 +1,6 @@
+framework module AnnounceKit {
+  umbrella header "AnnounceKit-umbrella.h"
+
+  export *
+  module * { export * }
+}

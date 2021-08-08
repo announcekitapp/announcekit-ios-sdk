@@ -1,0 +1,22 @@
+{
+  "name": "AnnounceKit",
+  "version": "0.1.0",
+  "summary": "A short description of AnnounceKit.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/Seyfeddin Başsaraç/AnnounceKit",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "Seyfeddin Başsaraç": "seyfeddin@wearethread.co"
+  },
+  "source": {
+    "git": "https://github.com/Seyfeddin Başsaraç/AnnounceKit.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "9.0"
+  },
+  "source_files": "AnnounceKit/Classes/**/*"
+}
