@@ -21,6 +21,66 @@ public struct AnnounceKitSettings {
     }
 }
 
+public protocol AnnounceKitDelegate: AnyObject {
+
+    func announceKitView(
+        _ view: AnnounceKitView,
+        didInitialize widget: String
+    )
+    func announceKitView(
+        _ view: AnnounceKitView,
+        didInitializeWidget widget: String
+    )
+    func announceKitView(
+        _ view: AnnounceKitView,
+        didOpenWidget widget: String
+    )
+    func announceKitView(
+        _ view: AnnounceKitView,
+        didCloseWidget widget: String
+    )
+    func announceKitView(
+        _ view: AnnounceKitView,
+        didResizeWidget widget: String,
+        size: CGSize
+    )
+    func announceKitView(
+        _ view: AnnounceKitView,
+        didUpdateUnreadCount count: Int,
+        widget: String
+    )
+}
+
+public extension AnnounceKitDelegate {
+
+    func announceKitView(
+        _ view: AnnounceKitView,
+        didInitialize widget: String
+    ) {}
+    func announceKitView(
+        _ view: AnnounceKitView,
+        didInitializeWidget widget: String
+    ) {}
+    func announceKitView(
+        _ view: AnnounceKitView,
+        didOpenWidget widget: String
+    ) {}
+    func announceKitView(
+        _ view: AnnounceKitView,
+        didCloseWidget widget: String
+    ) {}
+    func announceKitView(
+        _ view: AnnounceKitView,
+        didResizeWidget widget: String,
+        size: CGSize
+    ) {}
+    func announceKitView(
+        _ view: AnnounceKitView,
+        didUpdateUnreadCount count: Int,
+        widget: String
+    ) {}
+}
+
 open class AnnounceKitView: UIView {
 
     private var contentController = AKContentController()
@@ -29,6 +89,12 @@ open class AnnounceKitView: UIView {
     private var isOpen: Bool = false
 
     var unreadCount: Int = 0
+
+    public weak var delegate: AnnounceKitDelegate? {
+        didSet {
+            messenger.delegate = delegate
+        }
+    }
 
     private let messenger: AKMessenger
 
@@ -47,6 +113,7 @@ open class AnnounceKitView: UIView {
 
         addSubview(webView)
         self.messenger.view = self
+        self.messenger.delegate = delegate
     }
 
     required public init?(coder: NSCoder) {
@@ -58,6 +125,7 @@ open class AnnounceKitView: UIView {
 
         addSubview(webView)
         self.messenger.view = self
+        self.messenger.delegate = delegate
     }
 
     private func configureWebView() {
@@ -67,13 +135,14 @@ open class AnnounceKitView: UIView {
             configuration.defaultWebpagePreferences.allowsContentJavaScript = true
         }
         configuration.preferences.javaScriptEnabled = true
+        contentController.add(messenger, name: AKMessageType.eventTrigger)
+        contentController.add(messenger, name: AKMessageType.updateUnreadCount)
+        contentController.add(messenger, name: AKMessageType.logHandler)
         configuration.userContentController = contentController
-        configuration.userContentController.add(messenger, name: AKMessageType.eventTrigger)
-        configuration.userContentController.add(messenger, name: AKMessageType.updateUnreadCount)
-        configuration.userContentController.add(messenger, name: AKMessageType.logHandler)
 
         configuration.allowsInlineMediaPlayback = true
         self.webView = WKWebView(frame: .zero, configuration: configuration)
+        configure()
     }
 
     open override func layoutSubviews() {
@@ -126,9 +195,20 @@ private enum AKMessageType {
     static let eventTrigger = "eventTrigger"
 }
 
+private enum AKEventName: String {
+
+    case initialize = "init"
+    case widgetInit = "widget-init"
+    case widgetOpen = "widget-open"
+    case widgetClose = "widget-close"
+    case widgetResize = "widget-resize"
+}
+
 private class AKMessenger: NSObject, WKScriptMessageHandlerWithReply, WKScriptMessageHandler {
 
     weak var view: AnnounceKitView?
+
+    weak var delegate: AnnounceKitDelegate?
 
     override init() {
         super.init()
@@ -148,6 +228,7 @@ private class AKMessenger: NSObject, WKScriptMessageHandlerWithReply, WKScriptMe
             }
 
             view.unreadCount = unread
+            delegate?.announceKitView(view, didUpdateUnreadCount: unread, widget: view.settings?.widget ?? "")
         case AKMessageType.logHandler:
             print(message.name)
             print("\(message.body)")
@@ -156,10 +237,54 @@ private class AKMessenger: NSObject, WKScriptMessageHandlerWithReply, WKScriptMe
                 print("error parsing event payload: \(message.name)")
                 return
             }
+            handleEventTrigger(withInfo: dict)
         case AKMessageType.errorHandler:
             print("\(message.body)")
         default:
             print("error – unknown \(message.name)")
+        }
+    }
+
+    private func handleEventTrigger(withInfo info: [String: Any]) {
+
+        guard let eventName = info["event"] as? String,
+              let event = AKEventName(rawValue: eventName),
+              let widget = info["widget"] as? [String: Any],
+              let widgetID = widget["widget"] as? String,
+              let view = view else {
+            print("event name is missing: \(info)")
+            return
+        }
+
+        switch event {
+        case .initialize:
+            delegate?.announceKitView(view, didInitialize: widgetID)
+        case .widgetInit:
+            delegate?.announceKitView(view, didInitializeWidget: widgetID)
+        case .widgetOpen:
+            delegate?.announceKitView(view, didOpenWidget: widgetID)
+        case .widgetClose:
+            delegate?.announceKitView(view, didCloseWidget: widgetID)
+        case .widgetResize:
+
+            if let sizeDict = info["size"] as? [String: Any],
+               let width = sizeDict["width"] as? Double,
+               let height = sizeDict["height"] as? Double {
+                delegate?.announceKitView(
+                    view,
+                    didResizeWidget: widgetID,
+                    size: CGSize(
+                        width: width,
+                        height: height
+                    )
+                )
+            } else {
+                delegate?.announceKitView(
+                    view,
+                    didResizeWidget: widgetID,
+                    size: CGSize.zero
+                )
+            }
         }
     }
 
