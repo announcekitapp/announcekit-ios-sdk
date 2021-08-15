@@ -213,7 +213,6 @@
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
-						DevelopmentTeam = NT6HELKJQZ;
 						LastSwiftMigration = 0900;
 					};
 					607FACE41AFB9204008FA782 = {
@@ -498,11 +497,11 @@
 			baseConfigurationReference = C576B033154A3E1A663D3D0F /* Pods-AnnounceKit_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = NT6HELKJQZ;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = AnnounceKit/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.seyfeddin2.demo.AnnounceKit-Example";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.demo.AnnounceKit-Example";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
@@ -514,11 +513,11 @@
 			baseConfigurationReference = 06C26447CA4933421D1BFB04 /* Pods-AnnounceKit_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = NT6HELKJQZ;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = AnnounceKit/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.seyfeddin2.demo.AnnounceKit-Example";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.demo.AnnounceKit-Example";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
