@@ -9,10 +9,7 @@
 
     //log handler
     console.log = function (msg) {
-      if (typeof msg == 'object') {
-        msg = objToString(msg);
-      }
-      window.webkit.messageHandlers.logHandler.postMessage(msg);
+      window.webkit.messageHandlers.logHandler.postMessage(JSON.stringify(msg));
     };
 
     //error handler
@@ -70,16 +67,6 @@
       })
     }
   })()
-
-  function objToString(obj) {
-    var str = '';
-    for (var p in obj) {
-      if (obj.hasOwnProperty(p)) {
-        str += p + '::' + obj[p] + '\n';
-      }
-    }
-    return str;
-  }
 </script>
 <script src="https://cdn.announcekit.app/widget-v2.js"></script>
 </body>
