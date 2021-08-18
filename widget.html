@@ -1,108 +1,73 @@
 <html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-    </head>
-     <body>
-         <div class="announcekit-widget"></div>
-      <script>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<script>
+  (function init() {
+    if (!window.webkit) return;
 
-          // javascript
-          if (window.webkit) {
-              console.log = function(msg) {
-                  if (typeof msg == 'object') {
-                      msg = objToString(msg);
-                  }
-                  window.webkit.messageHandlers.logHandler.postMessage(msg);
-              };
+    //log handler
+    console.log = function (msg) {
+      window.webkit.messageHandlers.logHandler.postMessage(JSON.stringify(msg));
+    };
 
-              window.onerror = (msg, url, line, column, error) => {
-                  const message = {
-                      message: msg,
-                      url: url,
-                      line: line,
-                      column: column,
-                      error: JSON.stringify(error)
-                  }
-                  window.webkit.messageHandlers.errorHandler.postMessage(message);
-              };
-
-              window.onload = (event) => {
-                  if (typeof start === "function") {
-                      start();
-                  } else {
-                      console.log("Warning – Widget is not loaded from the iOS app");
-                  }
-
-                  announcekit.on("init", function() {
-                      // Called when the announcekit code loads. Before the widgets are loaded.
-                      console.log(`announcekit.on.init`);
-                      if (window.webkit) {
-                          window.webkit.messageHandlers.eventTrigger.postMessage({ widget: widget.conf, event: "init" });
-                      }
-                  });
-
-                  announcekit.on("widget-init", function(event) {
-                      // Called for each widget after the widget has been successfully loaded.
-                      // Widget  object is passed to the handler.
-                      console.log(`announcekit.on.widget-init`);
-
-                      if (window.webkit) {
-                          window.webkit.messageHandlers.eventTrigger.postMessage({ widget: widget.conf });
-                      }
-                      event.widget.watchState(function (unread) {
-                          console.log('read unread state', unread);
-                          if (window.webkit) {
-                              window.webkit.messageHandlers.updateUnreadCount.postMessage({ unread:unread });
-                          }
-                      }, function (state) {
-                          return state.ui.unreadCount || 0
-                      })
-                  });
-
-                  announcekit.on("widget-open", function({ widget }) {
-                      // Called when the specified widget is opened
-                      console.log(`announcekit.on.widget-open`);
-                      if (window.webkit) {
-                          window.webkit.messageHandlers.eventTrigger.postMessage({ widget: widget.conf, event: "widget-open" });
-                      }
-                  });
-
-                  announcekit.on("widget-close", function({ widget }) {
-                      // Called when the specified widget is closed
-                      console.log(`announcekit.on.widget-close`);
-                      if (window.webkit) {
-                          window.webkit.messageHandlers.eventTrigger.postMessage({ widget: widget.conf, event: "widget-close" });
-                      }
-                  });
-
-                  announcekit.on("widget-resize", function({ widget, size }) {
-                      // Called when the specified widget is resized
-                      console.log(`announcekit.on.widget-resize`);
-                      if (window.webkit) {
-                          window.webkit.messageHandlers.eventTrigger.postMessage({ widget: widget.conf, event: "widget-resize", size: size });
-                      }
-                  });
-
-                  announcekit.on("widget-unread", function({ widget, unread }) {
-                      // Called when unread post count of specified widget has been updated
-                      console.log(`announcekit.on.widget-unread`);
-
-                      if (window.webkit) {
-                          window.webkit.messageHandlers.updateUnreadCount.postMessage({ unread: unread });
-                      }
-                  });
-              };
-          }
-      function objToString(obj) {
-          var str = '';
-          for (var p in obj) {
-              if (obj.hasOwnProperty(p)) {
-                  str += p + '::' + obj[p] + '\n';
-              }
-          }
-          return str;
+    //error handler
+    window.onerror = (msg, url, line, column, error) => {
+      const message = {
+        message: msg,
+        url: url,
+        line: line,
+        column: column,
+        error: JSON.stringify(error)
       }
-      </script>
-      <script src="https://cdn.announcekit.app/widget-v2.js"></script>
-     </body>
+      window.webkit.messageHandlers.errorHandler.postMessage(message);
+    };
+
+    window.onload = (event) => {
+      if (typeof start === "function") {
+        start();
+      } else {
+        console.log("Warning – Widget is not loaded from the iOS app");
+      }
+
+      announcekit.on("*", function ({data, name}) {
+        console.log('AnnounceKit event', name)
+        switch (name) {
+          case "init":
+            window.webkit.messageHandlers.eventTrigger.postMessage({event: "init"});
+            break;
+
+          // Called for each widget after the widget has been successfully loaded.
+          case "widget-init":
+
+          // Called for each widget after the widget has been opened.
+          case "widget-open":
+
+          // Called for each widget after the widget has been opened.
+          case "widget-close":
+            window.webkit.messageHandlers.eventTrigger.postMessage({widget: data.widget, event: name});
+            break;
+
+          // Called when unread post count of specified widget has been updated
+          case "widget-unread":
+            window.webkit.messageHandlers.updateUnreadCount.postMessage({unread: unread});
+            break;
+
+          // Called when the data state of the widget is changed
+          // TODO: We can store all state for further usages
+          case "widget-state":
+            const counter = data.ui.unread || 0;
+            window.webkit.messageHandlers.updateUnreadCount.postMessage({unread: counter});
+            break;
+
+          default:
+            break;
+        }
+      })
+    }
+  })()
+</script>
+<script src="https://cdn.announcekit.app/widget-v2.js"></script>
+</body>
 </html>
