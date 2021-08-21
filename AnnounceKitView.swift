@@ -10,14 +10,30 @@ import WebKit
 
 public struct AnnounceKitSettings {
 
-    public var text: String?
-    public var widget: String?
+    public var widget: String
     public var userID: String?
+    public var name: String?
+    public var language: String?
+    public var isBoostersEnabled: Bool = false
+    public var user: [String: Any]?
+    public var customFields: [String: Any]?
 
-    public init(text: String? = nil, widget: String? = nil, userID: String? = nil) {
-        self.text = text
+    public init(
+        widget: String,
+        userID: String? = nil,
+        name: String? = nil,
+        language: String? = nil,
+        isBoostersEnabled: Bool = false,
+        user: [String : Any]? = nil,
+        customFields: [String : Any]? = nil
+    ) {
         self.widget = widget
         self.userID = userID
+        self.name = name
+        self.language = language
+        self.isBoostersEnabled = isBoostersEnabled
+        self.user = user
+        self.customFields = customFields
     }
 }
 
@@ -148,32 +164,48 @@ open class AnnounceKitView: UIView {
         self.webView.load(URLRequest(url: scriptURL))
     }
 
-    private func createPushFunction(
-        userId: String,
-        widgetId: String,
-        selector: String
-    ) -> String {
+    private func createPushFunction() -> String? {
 
-        return """
-                announcekit.push({
-                    // Standard config
-                    widget: "https://announcekit.app/widgets/v2/\(widgetId)",
-                    selector: "\(selector)",
-                    user: {
-                        id: "\(userId)"
-                    },
-                    data: {
-                        platform: "ios",
-                        version: "\(1.0)"
-                    }
-                });
-               """
+        guard let settings = self.settings else {
+            print("AnnounceKit settings is missing")
+            return nil
+        }
+
+        var config: [String: Any] = [
+            "widget": "https://announcekit.app/widgets/v2/\(settings.widget)",
+            "selector": ".announcekit-widget"
+        ]
+
+        if let user = settings.user {
+            config["user"] = user
+        }
+
+        if let customData = settings.customFields {
+            config["data"] = customData
+        }
+        
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: config, options: [])
+            guard let jsonString = String(data: jsonData, encoding: .utf8) else {
+                print("Error creating json string")
+                return nil
+            }
+            return """
+                    announcekit.push(
+                        \(jsonString)
+                    );
+                    """
+        } catch let error {
+            print(error.localizedDescription)
+            return nil
+        }
     }
 
     public func displayContent() {
 
-        let showContentScript = createPushFunction(userId: settings?.userID ?? "", widgetId: settings?.widget ?? "", selector: ".announcekit-widget")
-        self.webView.evaluateJavaScript(showContentScript)
+        if let showContentScript = createPushFunction() {
+            self.webView.evaluateJavaScript(showContentScript)
+        }
     }
 }
 

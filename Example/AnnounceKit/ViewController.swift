@@ -16,7 +16,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        let settings = AnnounceKitSettings(text: "What's New", widget: "1yAi3u", userID: String(Date().timeIntervalSince1970))
+        let settings = AnnounceKitSettings(widget: "p3nhe")
         announceKitView.delegate = self
         announceKitView.settings = settings
     }
