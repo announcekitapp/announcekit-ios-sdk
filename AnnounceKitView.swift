@@ -191,7 +191,6 @@ private enum AKEventName: String {
     case widgetInit = "widget-init"
     case widgetOpen = "widget-open"
     case widgetClose = "widget-close"
-    case widgetResize = "widget-resize"
 }
 
 private class AKMessenger: NSObject, WKScriptMessageHandlerWithReply, WKScriptMessageHandler {
@@ -255,26 +254,6 @@ private class AKMessenger: NSObject, WKScriptMessageHandlerWithReply, WKScriptMe
             delegate?.announceKitView(view, didOpenWidget: widgetID)
         case .widgetClose:
             delegate?.announceKitView(view, didCloseWidget: widgetID)
-        case .widgetResize:
-
-            if let sizeDict = info["size"] as? [String: Any],
-               let width = sizeDict["width"] as? Double,
-               let height = sizeDict["height"] as? Double {
-                delegate?.announceKitView(
-                    view,
-                    didResizeWidget: widgetID,
-                    size: CGSize(
-                        width: width,
-                        height: height
-                    )
-                )
-            } else {
-                delegate?.announceKitView(
-                    view,
-                    didResizeWidget: widgetID,
-                    size: CGSize.zero
-                )
-            }
         }
     }
 
