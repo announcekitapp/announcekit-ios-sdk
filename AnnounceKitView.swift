@@ -41,11 +41,6 @@ public protocol AnnounceKitDelegate: AnyObject {
     )
     func announceKitView(
         _ view: AnnounceKitView,
-        didResizeWidget widget: String,
-        size: CGSize
-    )
-    func announceKitView(
-        _ view: AnnounceKitView,
         didUpdateUnreadCount count: Int,
         widget: String
     )
@@ -68,11 +63,6 @@ public extension AnnounceKitDelegate {
     func announceKitView(
         _ view: AnnounceKitView,
         didCloseWidget widget: String
-    ) {}
-    func announceKitView(
-        _ view: AnnounceKitView,
-        didResizeWidget widget: String,
-        size: CGSize
     ) {}
     func announceKitView(
         _ view: AnnounceKitView,

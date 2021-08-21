@@ -55,10 +55,6 @@ extension ViewController: AnnounceKitDelegate {
 
     }
 
-    func announceKitView(_ view: AnnounceKitView, didResizeWidget widget: String, size: CGSize) {
-
-    }
-
     func announceKitView(_ view: AnnounceKitView, didUpdateUnreadCount count: Int, widget: String) {
 
     }
