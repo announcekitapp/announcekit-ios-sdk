@@ -11,7 +11,6 @@ import WebKit
 public struct AnnounceKitSettings {
 
     public var widget: String
-    public var userID: String?
     public var name: String?
     public var language: String?
     public var isBoostersEnabled: Bool = false
@@ -20,7 +19,6 @@ public struct AnnounceKitSettings {
 
     public init(
         widget: String,
-        userID: String? = nil,
         name: String? = nil,
         language: String? = nil,
         isBoostersEnabled: Bool = false,
@@ -28,7 +26,6 @@ public struct AnnounceKitSettings {
         customFields: [String : Any]? = nil
     ) {
         self.widget = widget
-        self.userID = userID
         self.name = name
         self.language = language
         self.isBoostersEnabled = isBoostersEnabled
