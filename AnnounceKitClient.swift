@@ -116,7 +116,7 @@ public struct AnnounceKitLauncherButtonSettings {
 
 open class AnnounceKitLauncherButton: UIButton {
 
-    private var badgeButton: UIButton?
+    internal var badgeButton: UIButton?
 
     public var buttonSettings: AnnounceKitLauncherButtonSettings? {
         didSet {
@@ -447,6 +447,7 @@ private class AKMessenger: NSObject, WKScriptMessageHandler {
                 var launcherSettings = view.launcherSettings ?? AnnounceKitLauncherButtonSettings()
                 launcherSettings.unreadCount = view.unreadCount
                 button.buttonSettings = launcherSettings
+                button.badgeButton?.addTarget(view, action: #selector(AnnounceKitClient.buttonTapped(_:)), for: .touchUpInside)
                 button.addTarget(view, action: #selector(AnnounceKitClient.buttonTapped(_:)), for: .touchUpInside)
                 view.launcherCompletion?(button)
                 view.launcherCompletion = nil
