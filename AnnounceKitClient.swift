@@ -93,15 +93,17 @@ public struct AnnounceKitLauncherButtonSettings {
     var unreadCount: Int = 0
     var titleFont: UIFont?
     var badgeTitleFont: UIFont = .systemFont(ofSize: 12.0)
-    var badgeBackgroundColor: UIColor?
+    var badgeBackgroundColor: UIColor = .systemRed
     var titleColor: UIColor?
     var badgeTitleColor: UIColor?
+    var badgeVerticalOffset: CGFloat = -2.0
+    var badgeHorizontalOffset: CGFloat = 2.0
 
     public init(
         title: String? = nil,
         titleFont: UIFont? = nil,
         badgeTitleFont: UIFont = .systemFont(ofSize: 12.0),
-        badgeBackgroundColor: UIColor? = nil,
+        badgeBackgroundColor: UIColor = .systemRed,
         titleColor: UIColor? = nil,
         badgeTitleColor: UIColor? = nil
     ) {
@@ -160,6 +162,7 @@ open class AnnounceKitLauncherButton: UIButton {
                 badgeButton?.backgroundColor = settings.badgeBackgroundColor
                 badgeButton?.setTitleColor(settings.badgeTitleColor, for: .normal)
                 badgeButton?.titleLabel?.font = settings.badgeTitleFont
+                badgeButton?.contentEdgeInsets = UIEdgeInsets(top: 2.0, left: 5.0, bottom: 2.0, right: 5.0)
                 setTitleColor(settings.titleColor ?? .black, for: .normal)
                 titleLabel?.font = settings.titleFont ?? .systemFont(ofSize: 18.0)
                 backgroundColor = .clear
@@ -170,7 +173,7 @@ open class AnnounceKitLauncherButton: UIButton {
                 if let badgeButton = badgeButton {
                     addSubview(badgeButton)
                     badgeButton.sizeToFit()
-                    badgeButton.frame = CGRect(x: frame.maxX, y: frame.minY, width: badgeButton.bounds.width, height: badgeButton.bounds.height)
+                    badgeButton.frame = CGRect(x: bounds.width, y: 0, width: badgeButton.bounds.width, height: badgeButton.bounds.height)
                 }
             }
         } else {
@@ -189,7 +192,13 @@ open class AnnounceKitLauncherButton: UIButton {
 
         if let badgeButton = badgeButton {
             badgeButton.sizeToFit()
-            badgeButton.frame = CGRect(x: frame.maxX, y: frame.minY, width: badgeButton.bounds.width, height: badgeButton.bounds.height)
+            badgeButton.frame = CGRect(
+                x: bounds.width - (badgeButton.bounds.width / 2) + (buttonSettings?.badgeHorizontalOffset ?? 0.0),
+                y: 0 + (buttonSettings?.badgeVerticalOffset ?? 0.0),
+                width: badgeButton.bounds.width,
+                height: badgeButton.bounds.height
+            )
+            badgeButton.layer.cornerRadius = badgeButton.bounds.height / 2.0
         }
     }
 }
