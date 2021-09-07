@@ -11,13 +11,13 @@ import AnnounceKit
 
 class ViewController: UIViewController {
 
-    var announceKitView: AnnounceKitView!
+    var announceKitView: AnnounceKitClient!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         let settings = AnnounceKitSettings(widget: "3tNOGA")
-        announceKitView = AnnounceKitView(withSettings: settings, viewControllerToPresent: self)
+        announceKitView = AnnounceKitClient(withSettings: settings, viewControllerToPresent: self)
         announceKitView.delegate = self
         announceKitView.prepareLauncher(
             launcherSettings: AnnounceKitLauncherButtonSettings(
@@ -52,19 +52,19 @@ class ViewController: UIViewController {
 
 extension ViewController: AnnounceKitDelegate {
 
-    func announceKitView(_ view: AnnounceKitView, didInitialize widget: String) {
+    func announceKitView(_ client: AnnounceKitClient, didInitialize widget: String) {
 
     }
 
-    func announceKitView(_ view: AnnounceKitView, didOpenWidget widget: String) {}
+    func announceKitView(_ client: AnnounceKitClient, didOpenWidget widget: String) {}
 
-    func announceKitView(_ view: AnnounceKitView, didCloseWidget widget: String) {}
+    func announceKitView(_ client: AnnounceKitClient, didCloseWidget widget: String) {}
 
-    func announceKitView(_ view: AnnounceKitView, didInitializeWidget widget: String) {
+    func announceKitView(_ client: AnnounceKitClient, didInitializeWidget widget: String) {
 
     }
 
-    func announceKitView(_ view: AnnounceKitView, didUpdateUnreadCount count: Int, widget: String) {
+    func announceKitView(_ client: AnnounceKitClient, didUpdateUnreadCount count: Int, widget: String) {
 
     }
 }

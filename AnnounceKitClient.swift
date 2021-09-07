@@ -40,23 +40,23 @@ public struct AnnounceKitSettings {
 public protocol AnnounceKitDelegate: AnyObject {
 
     func announceKitView(
-        _ view: AnnounceKitView,
+        _ client: AnnounceKitClient,
         didInitialize widget: String
     )
     func announceKitView(
-        _ view: AnnounceKitView,
+        _ client: AnnounceKitClient,
         didInitializeWidget widget: String
     )
     func announceKitView(
-        _ view: AnnounceKitView,
+        _ client: AnnounceKitClient,
         didOpenWidget widget: String
     )
     func announceKitView(
-        _ view: AnnounceKitView,
+        _ client: AnnounceKitClient,
         didCloseWidget widget: String
     )
     func announceKitView(
-        _ view: AnnounceKitView,
+        _ client: AnnounceKitClient,
         didUpdateUnreadCount count: Int,
         widget: String
     )
@@ -65,23 +65,23 @@ public protocol AnnounceKitDelegate: AnyObject {
 public extension AnnounceKitDelegate {
 
     func announceKitView(
-        _ view: AnnounceKitView,
+        _ client: AnnounceKitClient,
         didInitialize widget: String
     ) {}
     func announceKitView(
-        _ view: AnnounceKitView,
+        _ client: AnnounceKitClient,
         didInitializeWidget widget: String
     ) {}
     func announceKitView(
-        _ view: AnnounceKitView,
+        _ client: AnnounceKitClient,
         didOpenWidget widget: String
     ) {}
     func announceKitView(
-        _ view: AnnounceKitView,
+        _ client: AnnounceKitClient,
         didCloseWidget widget: String
     ) {}
     func announceKitView(
-        _ view: AnnounceKitView,
+        _ client: AnnounceKitClient,
         didUpdateUnreadCount count: Int,
         widget: String
     ) {}
@@ -154,25 +154,24 @@ open class AnnounceKitLauncherButton: UIButton {
                 layer.cornerRadius = bounds.height / 2.0
                 contentEdgeInsets = UIEdgeInsets(top: 4.0, left: 4.0, bottom: 4.0, right: 4.0)
             } else {
+                clipsToBounds = false
                 badgeButton = UIButton(type: .custom)
                 badgeButton?.setTitle(String(settings.unreadCount), for: .normal)
                 badgeButton?.backgroundColor = settings.badgeBackgroundColor
                 badgeButton?.setTitleColor(settings.badgeTitleColor, for: .normal)
                 badgeButton?.titleLabel?.font = settings.badgeTitleFont
-                if let badgeButton = badgeButton {
-                    addSubview(badgeButton)
-                    badgeButton.sizeToFit()
-                    NSLayoutConstraint.activate([
-                        badgeButton.centerXAnchor.constraint(equalTo: trailingAnchor),
-                        badgeButton.centerYAnchor.constraint(equalTo: topAnchor)
-                    ])
-                }
                 setTitleColor(settings.titleColor ?? .black, for: .normal)
                 titleLabel?.font = settings.titleFont ?? .systemFont(ofSize: 18.0)
                 backgroundColor = .clear
                 layer.cornerRadius = .zero
                 setTitle(settings.title, for: .normal)
                 contentEdgeInsets = UIEdgeInsets(top: 4.0, left: 4.0, bottom: 4.0, right: 4.0)
+                setNeedsDisplay()
+                if let badgeButton = badgeButton {
+                    addSubview(badgeButton)
+                    badgeButton.sizeToFit()
+                    badgeButton.frame = CGRect(x: frame.maxX, y: frame.minY, width: badgeButton.bounds.width, height: badgeButton.bounds.height)
+                }
             }
         } else {
             backgroundColor = .systemRed
@@ -188,13 +187,14 @@ open class AnnounceKitLauncherButton: UIButton {
 
         super.layoutSubviews()
 
-        if layer.cornerRadius != bounds.height / 2.0 {
-            layer.cornerRadius = bounds.height / 2.0
+        if let badgeButton = badgeButton {
+            badgeButton.sizeToFit()
+            badgeButton.frame = CGRect(x: frame.maxX, y: frame.minY, width: badgeButton.bounds.width, height: badgeButton.bounds.height)
         }
     }
 }
 
-open class AnnounceKitView: UIView {
+open class AnnounceKitClient {
 
     private var contentController = AKContentController()
     private var webView: WKWebView!
@@ -227,23 +227,9 @@ open class AnnounceKitView: UIView {
         self.viewControllerToPresent = viewControllerToPresent
         self.messenger = AKMessenger()
 
-        super.init(frame: .zero)
         configureWebView()
 
-        addSubview(webView)
-        self.messenger.view = self
-        self.messenger.delegate = delegate
-    }
-
-    required public init?(coder: NSCoder) {
-
-        self.messenger = AKMessenger()
-        super.init(coder: coder)
-
-        configureWebView()
-
-        addSubview(webView)
-        self.messenger.view = self
+        self.messenger.client = self
         self.messenger.delegate = delegate
     }
 
@@ -272,18 +258,13 @@ open class AnnounceKitView: UIView {
 
         configuration.allowsInlineMediaPlayback = true
         self.webView = WKWebView(frame: .zero, configuration: configuration)
+        self.webView.setNeedsLayout()
         configure()
-    }
-
-    open override func layoutSubviews() {
-
-        super.layoutSubviews()
-        webView.frame = self.bounds
     }
 
     private func configure() {
 
-        guard let scriptURL = Bundle(for: AnnounceKitView.self).url(forResource: "widget", withExtension: "html") else { return }
+        guard let scriptURL = Bundle(for: AnnounceKitClient.self).url(forResource: "widget", withExtension: "html") else { return }
 
         self.webView.load(URLRequest(url: scriptURL))
     }
@@ -336,7 +317,6 @@ open class AnnounceKitView: UIView {
 
         let wkWebViewController = UIViewController()
         if let webView = self.webView {
-            self.webView.removeFromSuperview()
             self.webView = webView
             wkWebViewController.view.addSubview(self.webView)
             self.webView.translatesAutoresizingMaskIntoConstraints = false
@@ -393,7 +373,7 @@ private enum AKEventName: String {
 
 private class AKMessenger: NSObject, WKScriptMessageHandler {
 
-    weak var view: AnnounceKitView?
+    weak var client: AnnounceKitClient?
 
     weak var delegate: AnnounceKitDelegate?
 
@@ -410,7 +390,7 @@ private class AKMessenger: NSObject, WKScriptMessageHandler {
         case AKMessageType.updateUnreadCount:
             guard let dict = message.body as? [String: Any],
                   let unread = dict["unread"] as? Int,
-                  let view = view else {
+                  let view = client else {
                 return
             }
 
@@ -438,7 +418,7 @@ private class AKMessenger: NSObject, WKScriptMessageHandler {
               let event = AKEventName(rawValue: eventName),
               let widget = info["widget"] as? [String: Any],
               let widgetID = widget["widget"] as? String,
-              let view = view else {
+              let view = client else {
             print("event name is missing: \(info)")
             return
         }
@@ -454,7 +434,7 @@ private class AKMessenger: NSObject, WKScriptMessageHandler {
                 var launcherSettings = view.launcherSettings ?? AnnounceKitLauncherButtonSettings()
                 launcherSettings.unreadCount = view.unreadCount
                 button.buttonSettings = launcherSettings
-                button.addTarget(view, action: #selector(AnnounceKitView.buttonTapped(_:)), for: .touchUpInside)
+                button.addTarget(view, action: #selector(AnnounceKitClient.buttonTapped(_:)), for: .touchUpInside)
                 view.launcherCompletion?(button)
                 view.launcherCompletion = nil
             }
