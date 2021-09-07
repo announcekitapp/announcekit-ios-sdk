@@ -11,14 +11,27 @@ import AnnounceKit
 
 class ViewController: UIViewController {
 
-    @IBOutlet weak var announceKitView: AnnounceKitView!
-
+    var announceKitView: AnnounceKitView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        let settings = AnnounceKitSettings(widget: "p3nhe")
+        let settings = AnnounceKitSettings(widget: "3tNOGA")
+        announceKitView = AnnounceKitView(withSettings: settings, viewControllerToPresent: self)
         announceKitView.delegate = self
-        announceKitView.settings = settings
+        announceKitView.prepareLauncher(
+            launcherSettings: AnnounceKitLauncherButtonSettings(
+                title: "What's New"
+            )
+        ) { (button) in
+            self.view.addSubview(button)
+            button.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                button.widthAnchor.constraint(equalTo: button.heightAnchor),
+                button.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+                button.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
+            ])
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -43,13 +56,9 @@ extension ViewController: AnnounceKitDelegate {
 
     }
 
-    func announceKitView(_ view: AnnounceKitView, didOpenWidget widget: String) {
+    func announceKitView(_ view: AnnounceKitView, didOpenWidget widget: String) {}
 
-    }
-
-    func announceKitView(_ view: AnnounceKitView, didCloseWidget widget: String) {
-
-    }
+    func announceKitView(_ view: AnnounceKitView, didCloseWidget widget: String) {}
 
     func announceKitView(_ view: AnnounceKitView, didInitializeWidget widget: String) {
 

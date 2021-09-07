@@ -41,6 +41,8 @@
 
                         // Called for each widget after the widget has been successfully loaded.
                         case "widget-init":
+                            window.webkit.messageHandlers.eventTrigger.postMessage({ widget: data.widget.conf, event: name });
+                        break;
 
                         // Called for each widget after the widget has been opened.
                         case "widget-open":
