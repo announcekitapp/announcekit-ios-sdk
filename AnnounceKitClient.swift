@@ -89,15 +89,15 @@ public extension AnnounceKitDelegate {
 
 public struct AnnounceKitLauncherButtonSettings {
 
-    var title: String?
-    var unreadCount: Int = 0
-    var titleFont: UIFont?
-    var badgeTitleFont: UIFont = .systemFont(ofSize: 12.0)
-    var badgeBackgroundColor: UIColor = .systemRed
-    var titleColor: UIColor?
-    var badgeTitleColor: UIColor?
-    var badgeVerticalOffset: CGFloat = -2.0
-    var badgeHorizontalOffset: CGFloat = 2.0
+    public var title: String?
+    public var unreadCount: Int = 0
+    public var titleFont: UIFont?
+    public var badgeTitleFont: UIFont = .systemFont(ofSize: 12.0)
+    public var badgeBackgroundColor: UIColor = .systemRed
+    public var titleColor: UIColor?
+    public var badgeTitleColor: UIColor?
+    public var badgeVerticalOffset: CGFloat = -2.0
+    public var badgeHorizontalOffset: CGFloat = 2.0
 
     public init(
         title: String? = nil,
@@ -121,10 +121,9 @@ open class AnnounceKitLauncherButton: UIButton {
 
     private var badgeButton: UIButton?
 
-    var buttonSettings: AnnounceKitLauncherButtonSettings? {
+    public var buttonSettings: AnnounceKitLauncherButtonSettings? {
         didSet {
             commonInit()
-            setNeedsDisplay()
         }
     }
 
@@ -149,15 +148,19 @@ open class AnnounceKitLauncherButton: UIButton {
 
         if let settings = buttonSettings {
             if !hasTitle {
-                backgroundColor = settings.badgeBackgroundColor ?? .systemRed
+                backgroundColor = settings.badgeBackgroundColor
                 setTitleColor(settings.badgeTitleColor ?? .white, for: .normal)
-                setTitle(settings.unreadCount > 0 ? String(settings.unreadCount) : " ", for: .normal)
+                setTitle(String(settings.unreadCount), for: .normal)
                 titleLabel?.font = settings.badgeTitleFont
                 layer.cornerRadius = bounds.height / 2.0
-                contentEdgeInsets = UIEdgeInsets(top: 4.0, left: 4.0, bottom: 4.0, right: 4.0)
+                contentEdgeInsets = UIEdgeInsets(top: 2.0, left: 5.0, bottom: 2.0, right: 5.0)
             } else {
                 clipsToBounds = false
-                badgeButton = UIButton(type: .custom)
+                if badgeButton == nil {
+                    let badge = UIButton(type: .custom)
+                    addSubview(badge)
+                    badgeButton = badge
+                }
                 badgeButton?.setTitle(String(settings.unreadCount), for: .normal)
                 badgeButton?.backgroundColor = settings.badgeBackgroundColor
                 badgeButton?.setTitleColor(settings.badgeTitleColor, for: .normal)
@@ -170,10 +173,14 @@ open class AnnounceKitLauncherButton: UIButton {
                 setTitle(settings.title, for: .normal)
                 contentEdgeInsets = UIEdgeInsets(top: 4.0, left: 4.0, bottom: 4.0, right: 4.0)
                 setNeedsDisplay()
+                badgeButton?.sizeToFit()
                 if let badgeButton = badgeButton {
-                    addSubview(badgeButton)
-                    badgeButton.sizeToFit()
-                    badgeButton.frame = CGRect(x: bounds.width, y: 0, width: badgeButton.bounds.width, height: badgeButton.bounds.height)
+                    badgeButton.frame = CGRect(
+                        x: bounds.width,
+                        y: 0,
+                        width: badgeButton.bounds.width < badgeButton.bounds.height ? badgeButton.bounds.height : badgeButton.bounds.width,
+                        height: badgeButton.bounds.height
+                    )
                 }
             }
         } else {
@@ -195,7 +202,7 @@ open class AnnounceKitLauncherButton: UIButton {
             badgeButton.frame = CGRect(
                 x: bounds.width - (badgeButton.bounds.width / 2) + (buttonSettings?.badgeHorizontalOffset ?? 0.0),
                 y: 0 + (buttonSettings?.badgeVerticalOffset ?? 0.0),
-                width: badgeButton.bounds.width,
+                width: badgeButton.bounds.width < badgeButton.bounds.height ? badgeButton.bounds.height : badgeButton.bounds.width,
                 height: badgeButton.bounds.height
             )
             badgeButton.layer.cornerRadius = badgeButton.bounds.height / 2.0
@@ -212,7 +219,7 @@ open class AnnounceKitClient {
 
     var unreadCount: Int = 0
 
-    fileprivate var launcherCompletion: ((UIButton) -> ())?
+    fileprivate var launcherCompletion: ((AnnounceKitLauncherButton) -> ())?
     fileprivate var launcherSettings: AnnounceKitLauncherButtonSettings?
 
     public weak var viewControllerToPresent: UIViewController?
@@ -244,7 +251,7 @@ open class AnnounceKitClient {
 
     public func prepareLauncher(
         launcherSettings: AnnounceKitLauncherButtonSettings?,
-        completion: @escaping (UIButton) -> ()
+        completion: @escaping (AnnounceKitLauncherButton) -> ()
     ) {
 
         launcherCompletion = completion
