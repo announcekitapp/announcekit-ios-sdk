@@ -35,15 +35,6 @@ class BadgeOnlyViewController: UIViewController {
             self.launcherButton = button
         }
     }
-
-    override func viewDidAppear(_ animated: Bool) {
-
-        super.viewDidAppear(animated)
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
-            self.announceKitClient.displayContent()
-        })
-    }
 }
 
 // MARK: - AnnounceKitDelegate

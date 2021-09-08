@@ -235,7 +235,10 @@ open class AnnounceKitClient {
         }
     }
 
-    public init(withSettings settings: AnnounceKitSettings, viewControllerToPresent: UIViewController? = nil) {
+    public required init(
+        withSettings settings: AnnounceKitSettings,
+        viewControllerToPresent: UIViewController? = nil
+    ) {
         self.settings = settings
         self.viewControllerToPresent = viewControllerToPresent
         self.messenger = AKMessenger()
@@ -260,9 +263,6 @@ open class AnnounceKitClient {
     private func configureWebView() {
 
         let configuration = WKWebViewConfiguration()
-        if #available(iOS 14.0, *) {
-            configuration.defaultWebpagePreferences.allowsContentJavaScript = true
-        }
         configuration.preferences.javaScriptEnabled = true
         contentController.add(messenger, name: AKMessageType.eventTrigger)
         contentController.add(messenger, name: AKMessageType.updateUnreadCount)
@@ -322,7 +322,9 @@ open class AnnounceKitClient {
     public func displayContent() {
 
         if let showContentScript = createPushFunction() {
-            self.webView.evaluateJavaScript(showContentScript)
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                self.webView.evaluateJavaScript(showContentScript)
+            }
         }
     }
 
