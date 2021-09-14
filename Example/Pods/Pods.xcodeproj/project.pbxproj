@@ -33,6 +33,8 @@
 		CA63ADACAC6C2BF1E30108E6BEF68A09 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57221B54D014471C3D3E1925EFC917C8 /* Foundation.framework */; };
 		CD163A24268C848A004CEC6F /* AnnounceKitClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD163A23268C848A004CEC6F /* AnnounceKitClient.swift */; };
 		CD379BC826A33ED400FB0D09 /* widget.html in Resources */ = {isa = PBXBuildFile; fileRef = CD379BC726A33ED400FB0D09 /* widget.html */; };
+		CDF831A426F1462A00260706 /* AKMessenger.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF831A326F1462A00260706 /* AKMessenger.swift */; };
+		CDF831B426F146DD00260706 /* AnnounceKitLauncherButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF831B326F146DD00260706 /* AnnounceKitLauncherButton.swift */; };
 		D04AAC8B22E4A4DC4F39891C4E52F251 /* UIImage+Diff.h in Headers */ = {isa = PBXBuildFile; fileRef = 96187BF3038121CC146335E9FF0B0AFF /* UIImage+Diff.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		D057CA1F78643BFEEDCD9475B1F6B1CF /* AnnounceKit-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 4948697F5E9B33E4D97A1EE893455FF3 /* AnnounceKit-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DA84B2C3F368F5E83315AAE94A54A7A9 /* AnnounceKit-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 49CA000A7BE5820A9F9A4BBD7CC925D3 /* AnnounceKit-dummy.m */; };
@@ -116,6 +118,8 @@
 		CBFF6C5FD9C3A84274A9314D3E940B6E /* FBSnapshotTestCase.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = FBSnapshotTestCase.modulemap; sourceTree = "<group>"; };
 		CD163A23268C848A004CEC6F /* AnnounceKitClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnounceKitClient.swift; sourceTree = "<group>"; };
 		CD379BC726A33ED400FB0D09 /* widget.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = widget.html; sourceTree = "<group>"; };
+		CDF831A326F1462A00260706 /* AKMessenger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AKMessenger.swift; sourceTree = "<group>"; };
+		CDF831B326F146DD00260706 /* AnnounceKitLauncherButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnounceKitLauncherButton.swift; sourceTree = "<group>"; };
 		CE123B8BDAE248ABA758903FD0CD1E1F /* Pods-AnnounceKit_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-AnnounceKit_Example-frameworks.sh"; sourceTree = "<group>"; };
 		D08CEBB9BDD9EF7A662ECFC0305C169E /* FBSnapshotTestCase-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "FBSnapshotTestCase-prefix.pch"; sourceTree = "<group>"; };
 		D11826D4A91DD238FE2606636BCE8A5B /* AnnounceKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AnnounceKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -191,6 +195,8 @@
 				678F5FF8F6363467E8B18126E1CAF68F /* Pod */,
 				5D72198F70E04AA9ACC85E0BCD98C596 /* Support Files */,
 				CD163A23268C848A004CEC6F /* AnnounceKitClient.swift */,
+				CDF831B326F146DD00260706 /* AnnounceKitLauncherButton.swift */,
+				CDF831A326F1462A00260706 /* AKMessenger.swift */,
 				CD379BC726A33ED400FB0D09 /* widget.html */,
 			);
 			name = AnnounceKit;
@@ -562,6 +568,8 @@
 			files = (
 				CD163A24268C848A004CEC6F /* AnnounceKitClient.swift in Sources */,
 				DA84B2C3F368F5E83315AAE94A54A7A9 /* AnnounceKit-dummy.m in Sources */,
+				CDF831A426F1462A00260706 /* AKMessenger.swift in Sources */,
+				CDF831B426F146DD00260706 /* AnnounceKitLauncherButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
