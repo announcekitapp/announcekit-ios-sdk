@@ -163,7 +163,16 @@ open class AnnounceKitLauncherButton: UIButton {
                 badgeButton?.setTitleColor(settings.badgeTitleColor, for: .normal)
                 badgeButton?.titleLabel?.font = settings.badgeTitleFont
                 badgeButton?.contentEdgeInsets = UIEdgeInsets(top: 2.0, left: 5.0, bottom: 2.0, right: 5.0)
-                setTitleColor(settings.titleColor ?? .black, for: .normal)
+                var defaultLabelColor: UIColor
+                if #available(iOS 12.0, *) {
+                    defaultLabelColor = traitCollection.userInterfaceStyle == .light ? .black : .white
+                } else {
+                    defaultLabelColor = .black
+                }
+                setTitleColor(
+                    settings.titleColor ?? defaultLabelColor,
+                    for: .normal
+                )
                 titleLabel?.font = settings.titleFont ?? .systemFont(ofSize: 18.0)
                 backgroundColor = .clear
                 layer.cornerRadius = .zero
@@ -290,7 +299,7 @@ open class AnnounceKitClient {
         }
 
         var config: [String: Any] = [
-            "widget": "https://announcekit.app/widgets/v2/\(settings.widget)",
+            "widget": "https://announcekit.co/widgets/v2/\(settings.widget)",
             "selector": ".announcekit-widget"
         ]
 
