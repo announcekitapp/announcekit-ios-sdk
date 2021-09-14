@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'AnnounceKit'
   s.version          = '0.9.0'
-  s.summary          = 'A short description of AnnounceKit.'
+  s.summary          = 'AnnounceKit is the iOS SDK of AnnounceKit. Find more info on https://announcekit.app'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -25,11 +25,11 @@ TODO: Add long description of the pod here.
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Seyfeddin Başsaraç' => 'seyfeddin@wearethread.co' }
-  s.source           = { :git => 'https://github.com/announcekitapp/announcekit-ios-sdk.git', :tag => s.version.to_s }
+  s.source           = { :git => 'git@github.com:announcekitapp/announcekit-ios-sdk.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
   s.pod_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
   s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
-
+  s.swift_version = '5.0'
   s.ios.deployment_target = '11.0'
 
   s.source_files = 'Sources/AnnounceKit/Classes/**/*'
