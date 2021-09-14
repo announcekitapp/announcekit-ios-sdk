@@ -32,7 +32,7 @@ TODO: Add long description of the pod here.
 
   s.ios.deployment_target = '11.0'
 
-  s.source_files = 'AnnounceKit/Classes/**/*'
+  s.source_files = 'Sources/AnnounceKit/Classes/**/*'
   
   # s.resource_bundles = {
   #   'AnnounceKit' => ['AnnounceKit/Assets/*.png']
