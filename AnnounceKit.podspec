@@ -18,7 +18,12 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+  AnnounceKit is the iOS SDK of AnnounceKit.
+  It lets you display widgets right from your app. You can create native launcher buttons, or use your own UI components to trigger widgets.
+
+  You can also subscribe to unread count changes to update your UI.
+
+  Install via CocoaPods, Carthage and SPM.
                        DESC
 
   s.homepage         = 'https://announcekit.app'
@@ -26,7 +31,7 @@ TODO: Add long description of the pod here.
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Seyfeddin Başsaraç' => 'seyfeddin@wearethread.co' }
   s.source           = { :git => 'git@github.com:announcekitapp/announcekit-ios-sdk.git', :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
+  s.social_media_url = 'https://twitter.com/announcekit'
   s.pod_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
   s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
   s.swift_version = '5.0'
