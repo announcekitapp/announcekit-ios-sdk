@@ -1,18 +1,18 @@
 //
-//  BadgeOnlyViewController.swift
+//  CustomButtonViewController.swift
 //  AnnounceKit_Example
 //
-//  Created by Seyfeddin Bassarac on 7.09.2021.
+//  Created by Seyfeddin Bassarac on 18.09.2021.
 //  Copyright © 2021 CocoaPods. All rights reserved.
 //
 
 import UIKit
 import AnnounceKit
 
-class BadgeOnlyViewController: UIViewController {
+class CustomButtonViewController: UIViewController {
 
     private var announceKitClient: AnnounceKitClient!
-    private var launcherButton: AnnounceKitLauncherButton?
+    @IBOutlet private weak var customButton: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,26 +20,19 @@ class BadgeOnlyViewController: UIViewController {
         let settings = AnnounceKitSettings(widget: "3xdhio")
         announceKitClient = AnnounceKitClient(withSettings: settings, viewControllerToPresent: self)
         announceKitClient.delegate = self
+        customButton.isEnabled = false
+        announceKitClient.startWidget()
+    }
 
-        announceKitClient.prepareLauncher(
-            launcherSettings: AnnounceKitLauncherButtonSettings(
-                badgeBackgroundColor: .systemBlue
-            )
-        ) { (button) in
-            self.view.addSubview(button)
-            button.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                button.centerXAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.centerXAnchor),
-                button.centerYAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.centerYAnchor)
-            ])
-            self.launcherButton = button
-        }
+    @IBAction private func customButtonTapped(_ sender: UIButton) {
+
+        announceKitClient.presentWidget()
     }
 }
 
 // MARK: - AnnounceKitDelegate
 
-extension BadgeOnlyViewController: AnnounceKitDelegate {
+extension CustomButtonViewController: AnnounceKitDelegate {
 
     func announceKitView(
         _ client: AnnounceKitClient,
@@ -59,14 +52,14 @@ extension BadgeOnlyViewController: AnnounceKitDelegate {
     func announceKitView(
         _ client: AnnounceKitClient,
         didInitializeWidget widget: String
-    ) {}
+    ) {
+
+        customButton.isEnabled = true
+    }
 
     func announceKitView(
         _ client: AnnounceKitClient,
         didUpdateUnreadCount count: Int,
         widget: String
-    ) {
-
-        launcherButton?.buttonSettings?.unreadCount = count
-    }
+    ) {}
 }

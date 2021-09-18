@@ -13,6 +13,7 @@
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
+		CD707EEA26F6159900A14BBF /* CustomButtonViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD707EE926F6159900A14BBF /* CustomButtonViewController.swift */; };
 		CDAAB21A26E806C300900E4E /* BadgeWithTextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDAAB21926E806C300900E4E /* BadgeWithTextViewController.swift */; };
 		CDAAB21E26E806CF00900E4E /* BadgeOnlyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDAAB21D26E806CF00900E4E /* BadgeOnlyViewController.swift */; };
 		EB31AB1FF56BB7907A5A3F9F /* Pods_AnnounceKit_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD676DEC12744220F0F54AE7 /* Pods_AnnounceKit_Tests.framework */; };
@@ -48,6 +49,7 @@
 		AA1F4B70D19389FD414DAEDA /* AnnounceKit.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = AnnounceKit.podspec; path = ../AnnounceKit.podspec; sourceTree = "<group>"; };
 		BD676DEC12744220F0F54AE7 /* Pods_AnnounceKit_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AnnounceKit_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C576B033154A3E1A663D3D0F /* Pods-AnnounceKit_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AnnounceKit_Example.debug.xcconfig"; path = "Target Support Files/Pods-AnnounceKit_Example/Pods-AnnounceKit_Example.debug.xcconfig"; sourceTree = "<group>"; };
+		CD707EE926F6159900A14BBF /* CustomButtonViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButtonViewController.swift; sourceTree = "<group>"; };
 		CDAAB21926E806C300900E4E /* BadgeWithTextViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeWithTextViewController.swift; sourceTree = "<group>"; };
 		CDAAB21D26E806CF00900E4E /* BadgeOnlyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeOnlyViewController.swift; sourceTree = "<group>"; };
 		ECDE2AD5D341C1CD1F5EBFFE /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 				607FACD71AFB9204008FA782 /* AnnounceKitListController.swift */,
 				CDAAB21926E806C300900E4E /* BadgeWithTextViewController.swift */,
 				CDAAB21D26E806CF00900E4E /* BadgeOnlyViewController.swift */,
+				CD707EE926F6159900A14BBF /* CustomButtonViewController.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
@@ -359,6 +362,7 @@
 				CDAAB21E26E806CF00900E4E /* BadgeOnlyViewController.swift in Sources */,
 				607FACD81AFB9204008FA782 /* AnnounceKitListController.swift in Sources */,
 				CDAAB21A26E806C300900E4E /* BadgeWithTextViewController.swift in Sources */,
+				CD707EEA26F6159900A14BBF /* CustomButtonViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

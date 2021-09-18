@@ -134,7 +134,7 @@ open class AnnounceKitClient {
         launcherCompletion = completion
         self.launcherSettings = launcherSettings
         configure()
-        displayContent()
+        startWidget()
     }
 
     private func configureWebView() {
@@ -196,7 +196,7 @@ open class AnnounceKitClient {
         }
     }
 
-    public func displayContent() {
+    public func startWidget() {
 
         if let showContentScript = createPushFunction() {
             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
@@ -205,7 +205,7 @@ open class AnnounceKitClient {
         }
     }
 
-    @objc func buttonTapped(_ sender: UIButton) {
+    public func presentWidget() {
 
         let wkWebViewController = UIViewController()
         if let webView = self.webView {
@@ -244,5 +244,10 @@ open class AnnounceKitClient {
                 self.webView.transform = .identity
             }
         })
+    }
+
+    @objc func buttonTapped(_ sender: UIButton) {
+
+        presentWidget()
     }
 }
