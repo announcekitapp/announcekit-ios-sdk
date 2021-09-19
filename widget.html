@@ -60,7 +60,7 @@
                         // Called when the data state of the widget is changed
                         // TODO: We can store all state for further usages
                         case "widget-state":
-                        const counter = data.ui.unread || 0;
+                        const counter = data.ui.unreadCount || 0;
                         window.webkit.messageHandlers.updateUnreadCount.postMessage({ widget: data.widget.conf, unread: counter });
                         break;
 
