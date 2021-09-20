@@ -30,7 +30,7 @@ Pod::Spec.new do |s|
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Seyfeddin Başsaraç' => 'seyfeddin@wearethread.co' }
-  s.source           = { :git => 'git@github.com:announcekitapp/announcekit-ios-sdk.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/announcekitapp/announcekit-ios-sdk.git', :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/announcekit'
   s.pod_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
   s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
