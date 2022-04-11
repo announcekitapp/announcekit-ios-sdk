@@ -16,7 +16,7 @@ class TabBarBadgeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let settings = AnnounceKitSettings(widget: "3xdhio")
+        let settings = AnnounceKitSettings(widget: "2nI0Ok")
         announceKitClient = AnnounceKitClient(withSettings: settings, viewControllerToPresent: self)
         announceKitClient.delegate = self
         announceKitClient.startWidget()
