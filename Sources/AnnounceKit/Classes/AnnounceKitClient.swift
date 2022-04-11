@@ -153,10 +153,87 @@ open class AnnounceKitClient {
     }
 
     private func configure() {
+        let widgetHTML = """
+            <html>
+                <head>
+                    <meta name="viewport" content="width=device-width, initial-scale=1">
+                </head>
+                 <body>
+                     <div class="announcekit-widget"></div>
+                  <script>
+                    (function init() {
+                        if (!window.webkit) return;
 
-        guard let scriptURL = Bundle(for: AnnounceKitClient.self).url(forResource: "widget", withExtension: "html") else { return }
+                        //log handler
+                        console.log = function (msg) {
+                            window.webkit.messageHandlers.logHandler.postMessage(JSON.stringify(msg));
+                        };
 
-        self.webView.load(URLRequest(url: scriptURL))
+                        //error handler
+                        window.onerror = (msg, url, line, column, error) => {
+                            const message = {
+                                message: msg,
+                                url: url,
+                                line: line,
+                                column: column,
+                                error: JSON.stringify(error)
+                            }
+                            window.webkit.messageHandlers.errorHandler.postMessage(message);
+                        };
+
+                        window.onload = (event) => {
+                            if (typeof start === "function") {
+                                start();
+                            } else {
+                                console.log("Warning – Widget is not loaded from the iOS app");
+                            }
+
+                            announcekit.on("*", function ({data, name, size}) {
+                                console.log('AnnounceKit event', name)
+                                switch (name) {
+                                    case "init":
+                                    window.webkit.messageHandlers.eventTrigger.postMessage({ widget: data.widget.conf, event: "init" });
+                                    break;
+
+                                    // Called for each widget after the widget has been successfully loaded.
+                                    case "widget-init":
+                                        window.webkit.messageHandlers.eventTrigger.postMessage({ widget: data.widget.conf, event: name });
+                                    break;
+
+                                    // Called for each widget after the widget has been opened.
+                                    case "widget-open":
+
+                                    // Called for each widget after the widget has been opened.
+                                    case "widget-close":
+                                    window.webkit.messageHandlers.eventTrigger.postMessage({ widget: data.widget.conf, event: name });
+                                    break;
+
+                                    // Called when unread post count of specified widget has been updated
+                                    case "widget-unread":
+                                    window.webkit.messageHandlers.updateUnreadCount.postMessage({ widget: data.widget.conf, unread: unread });
+                                    break;
+
+                                    // Called when the data state of the widget is changed
+                                    // TODO: We can store all state for further usages
+                                    case "widget-state":
+                                    const counter = data.ui.unreadCount || 0;
+                                    window.webkit.messageHandlers.updateUnreadCount.postMessage({ widget: data.widget.conf, unread: counter });
+                                    break;
+
+                                    default:
+                                    break;
+                                }
+                            })
+                        }
+                    })()
+                </script>
+                <script src="https://cdn.announcekit.app/widget-v2.js"></script>
+            </body>
+            </html>
+
+        """
+        
+        self.webView.loadHTMLString(widgetHTML, baseURL: URL(string:"https://announcekit.co"))
     }
 
     private func createPushFunction() -> String? {
