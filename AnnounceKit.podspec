@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'AnnounceKit'
-  s.version          = '0.10.0'
+  s.version          = '0.10.1'
   s.summary          = 'AnnounceKit is the iOS SDK of AnnounceKit. Find more info on https://announcekit.app'
 
 # This description is used to generate tags and improve search results.
@@ -26,7 +26,7 @@ Pod::Spec.new do |s|
   Install via CocoaPods, Carthage and SPM.
                        DESC
 
-  s.homepage         = 'https://announcekit.app'
+  s.homepage         = 'https://announcekit.app/docs/ios-sdk'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Seyfeddin Başsaraç' => 'seyfeddin@wearethread.co' }
