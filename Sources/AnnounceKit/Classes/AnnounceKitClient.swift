@@ -13,7 +13,6 @@ public struct AnnounceKitSettings {
     public var widget: String
     public var name: String?
     public var language: String?
-    public var isBoostersEnabled: Bool = false
     public var user: [String: Any]?
     public var customFields: [String: Any]?
 
@@ -21,14 +20,12 @@ public struct AnnounceKitSettings {
         widget: String,
         name: String? = nil,
         language: String? = nil,
-        isBoostersEnabled: Bool = false,
         user: [String : Any]? = nil,
         customFields: [String : Any]? = nil
     ) {
         self.widget = widget
         self.name = name
         self.language = language
-        self.isBoostersEnabled = isBoostersEnabled
         self.user = user
         self.customFields = customFields
     }
@@ -119,6 +116,7 @@ open class AnnounceKitClient {
         self.settings = settings
         self.viewControllerToPresent = viewControllerToPresent
         self.messenger = AKMessenger()
+    
 
         configureWebView()
 
@@ -159,7 +157,7 @@ open class AnnounceKitClient {
                     <meta name="viewport" content="width=device-width, initial-scale=1">
                 </head>
                  <body>
-                     <div class="announcekit-widget"></div>
+                     <div style="display: none" class="announcekit-widget"></div>
                   <script>
                     (function init() {
                         if (!window.webkit) return;
@@ -182,17 +180,11 @@ open class AnnounceKitClient {
                         };
 
                         window.onload = (event) => {
-                            if (typeof start === "function") {
-                                start();
-                            } else {
-                                console.log("Warning – Widget is not loaded from the iOS app");
-                            }
-
                             announcekit.on("*", function ({data, name, size}) {
                                 console.log('AnnounceKit event', name)
                                 switch (name) {
                                     case "init":
-                                    window.webkit.messageHandlers.eventTrigger.postMessage({ widget: data.widget.conf, event: "init" });
+                                        window.webkit.messageHandlers.eventTrigger.postMessage({ widget: data.widget.conf, event: "init" });
                                     break;
 
                                     // Called for each widget after the widget has been successfully loaded.
@@ -245,8 +237,13 @@ open class AnnounceKitClient {
 
         var config: [String: Any] = [
             "widget": "https://announcekit.co/widgets/v2/\(settings.widget)",
-            "selector": ".announcekit-widget"
+            "selector": ".announcekit-widget",
+            "boosters": false
         ]
+        
+        if let language = settings.language {
+            config["lang"] = language
+        }
 
         if let user = settings.user {
             config["user"] = user
@@ -262,11 +259,7 @@ open class AnnounceKitClient {
                 print("Error creating json string")
                 return nil
             }
-            return """
-                    announcekit.push(
-                        \(jsonString)
-                    );
-                    """
+            return "announcekit.push(\(jsonString));"
         } catch let error {
             print(error.localizedDescription)
             return nil

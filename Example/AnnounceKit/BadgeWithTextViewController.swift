@@ -17,7 +17,7 @@ class BadgeWithTextViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let settings = AnnounceKitSettings(widget: "2nI0Ok")
+        let settings = AnnounceKitSettings(widget: "2nI0Ok", language: "fr")
         announceKitClient = AnnounceKitClient(withSettings: settings, viewControllerToPresent: self)
         announceKitClient.delegate = self
 
