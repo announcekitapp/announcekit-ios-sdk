@@ -1,9 +1,9 @@
 use_frameworks!
 
-platform :ios, '9.0'
+platform :ios, '11.0'
 
 target 'AnnounceKit_Example' do
-  pod 'AnnounceKit', :path => '../'
+  pod 'AnnounceKit'
 
   target 'AnnounceKit_Tests' do
     inherit! :search_paths

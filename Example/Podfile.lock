@@ -1,5 +1,5 @@
 PODS:
-  - AnnounceKit (0.1.0)
+  - AnnounceKit (0.10.0)
   - FBSnapshotTestCase (2.1.4):
     - FBSnapshotTestCase/SwiftSupport (= 2.1.4)
   - FBSnapshotTestCase/Core (2.1.4)
@@ -7,21 +7,18 @@ PODS:
     - FBSnapshotTestCase/Core
 
 DEPENDENCIES:
-  - AnnounceKit (from `../`)
+  - AnnounceKit
   - FBSnapshotTestCase (~> 2.1.4)
 
 SPEC REPOS:
   trunk:
+    - AnnounceKit
     - FBSnapshotTestCase
 
-EXTERNAL SOURCES:
-  AnnounceKit:
-    :path: "../"
-
 SPEC CHECKSUMS:
-  AnnounceKit: 4c2be1220581ce5a58495fa618955b6a283f74c8
+  AnnounceKit: a6702b63f5775a3aadf28e96c1846343e6802049
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
 
-PODFILE CHECKSUM: 94169d13a1367ad81b67e492ada878110694db9b
+PODFILE CHECKSUM: 40514ebba12de536516510c0c00beae51c02a823
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.2
