@@ -81,10 +81,12 @@ public extension AnnounceKitDelegate {
     ) {}
 }
 
-open class AnnounceKitClient {
+open class AnnounceKitClient : NSObject, WKNavigationDelegate {
 
-    private var contentController = AKContentController()
+    private var contentController: AKContentController
     private var webView: WKWebView!
+    private var isWebViewLoaded = false
+    private var pendingJavaScript: String?
 
     private var isOpen: Bool = false
 
@@ -116,7 +118,8 @@ open class AnnounceKitClient {
         self.settings = settings
         self.viewControllerToPresent = viewControllerToPresent
         self.messenger = AKMessenger()
-    
+        self.contentController = AKContentController()
+        super.init()
 
         configureWebView()
 
@@ -146,6 +149,7 @@ open class AnnounceKitClient {
 
         configuration.allowsInlineMediaPlayback = true
         self.webView = WKWebView(frame: .zero, configuration: configuration)
+        self.webView.navigationDelegate = self
         self.webView.setNeedsLayout()
         configure()
     }
@@ -269,9 +273,19 @@ open class AnnounceKitClient {
     public func startWidget() {
 
         if let showContentScript = createPushFunction() {
-            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-                self.webView.evaluateJavaScript(showContentScript)
+            if isWebViewLoaded {
+                self.webView.evaluateJavaScript(showContentScript, completionHandler: nil)
+            } else {
+                pendingJavaScript = showContentScript
             }
+        }
+    }
+
+     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        isWebViewLoaded = true
+        if let pendingScript = pendingJavaScript {
+            self.webView.evaluateJavaScript(pendingScript, completionHandler: nil)
+            pendingJavaScript = nil
         }
     }
 

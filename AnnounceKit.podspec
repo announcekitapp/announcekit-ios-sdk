@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'AnnounceKit'
-  s.version          = '0.10.1'
+  s.version          = '0.10.2'
   s.summary          = 'AnnounceKit is the iOS SDK of AnnounceKit. Find more info on https://announcekit.app'
 
 # This description is used to generate tags and improve search results.
